@@ -196,10 +196,16 @@ const CouponCard = ({ coupon, compact = false, onCouponClick }) => {
             </>
           )}
         </button>
-        <button onClick={(e) => e.stopPropagation()} className="sm:w-auto px-4 py-3 border border-primary text-primary rounded-xl font-semibold hover:bg-primary hover:text-primary-foreground transition-all duration-300 flex items-center justify-center">
+        <a
+          href={store?.website_url}
+          target="_blank"
+          rel="noopener noreferrer"
+          onClick={(e) => e.stopPropagation()}
+          className="sm:w-auto px-4 py-3 border border-primary text-primary rounded-xl font-semibold hover:bg-primary hover:text-primary-foreground transition-all duration-300 flex items-center justify-center"
+        >
           <ExternalLink className="w-4 h-4" />
           <span className="ml-2 sm:hidden">Visit Store</span>
-        </button>
+        </a>
       </div>
 
       {/* Success Message */}
