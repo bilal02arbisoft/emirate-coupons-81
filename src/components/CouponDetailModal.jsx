@@ -186,10 +186,16 @@ const CouponDetailModal = ({ coupon, isOpen, onClose }) => {
                 </>
               )}
             </button>
-            <button className="flex items-center justify-center px-6 py-3 border border-border rounded-xl hover:bg-muted transition-colors">
+            <a
+              href={store?.website_url}
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={(e) => e.stopPropagation()}
+              className="flex items-center justify-center px-6 py-3 border border-border rounded-xl hover:bg-muted transition-colors"
+            >
               <ExternalLink className="w-5 h-5 mr-2" />
               Visit Store
-            </button>
+            </a>
           </div>
         </div>
       </div>

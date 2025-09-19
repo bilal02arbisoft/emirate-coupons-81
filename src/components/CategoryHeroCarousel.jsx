@@ -167,10 +167,15 @@ const CategoryHeroCarousel = ({ categoryId }) => {
                             </>
                           )}
                         </button>
-                        <button className="flex items-center justify-center px-4 py-2 md:px-6 md:py-3 bg-white/10 text-white font-semibold rounded-xl hover:bg-white/20 transition-all duration-300 border border-white/20 backdrop-blur-sm text-sm md:text-base">
+                        <a
+                          href={store?.website_url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="flex items-center justify-center px-4 py-2 md:px-6 md:py-3 bg-white/10 text-white font-semibold rounded-xl hover:bg-white/20 transition-all duration-300 border border-white/20 backdrop-blur-sm text-sm md:text-base"
+                        >
                           <ExternalLink className="w-4 h-4 md:w-5 md:h-5 mr-2" />
                           Shop Now
-                        </button>
+                        </a>
                       </div>
                     </div>
 
