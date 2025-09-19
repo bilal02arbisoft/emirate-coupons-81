@@ -12,6 +12,7 @@ export default defineConfig(({ mode }) => ({
     // Add allowedHosts for Railway deployment
     allowedHosts: [
       "emirate-coupons-81-production-7dbb.up.railway.app",
+      "discount-code.ae",
       // You can also use a wildcard for all Railway hosts
       ".up.railway.app",
       // Allow localhost for development
