@@ -18,7 +18,7 @@ const StoreCard = ({ store }) => {
               e.target.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(store.name)}&background=f1f5f9&color=64748b`;
             }}
           />
-          <div className="flex items-center space-x-1 text-sm text-muted-foreground">
+          <div className="hidden md:flex items-center space-x-1 text-sm text-muted-foreground">
             <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
             <span>{store.rating}</span>
           </div>
