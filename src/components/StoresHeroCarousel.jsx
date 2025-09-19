@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { ChevronLeft, ChevronRight, Star, ShoppingBag, Users, Award } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import { useStores } from '../hooks/useAPI';
 
 const StoresHeroCarousel = () => {
@@ -136,15 +137,13 @@ const StoresHeroCarousel = () => {
                       </div>
 
                       <div className="flex flex-col sm:flex-row gap-2 sm:gap-3">
-                        <a
-                          href={store?.website_url}
-                          target="_blank"
-                          rel="noopener noreferrer"
+                            <Link
+                          to={`/store/${store.id}`}
                           className="flex items-center justify-center px-3 py-1.5 sm:px-4 sm:py-2 md:px-5 md:py-2.5 bg-white text-primary font-semibold rounded-xl hover:bg-white/95 transition-all duration-300 transform hover:scale-105 shadow-lg text-xs sm:text-sm md:text-base"
                         >
                           <ShoppingBag className="w-3 h-3 sm:w-4 sm:h-4 md:w-5 md:h-5 mr-1.5 sm:mr-2" />
                           View Store Deals
-                        </a>
+                           </Link>
                         <a
                           href={store.website_url}
                           target="_blank"
