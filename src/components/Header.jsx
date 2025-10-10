@@ -127,6 +127,14 @@ const Header = () => {
             >
               Hot Deals
             </Link>
+            <Link
+              to="/blogs"
+              className={`text-sm font-medium transition-colors hover:text-primary ${
+                isActive('/blogs') ? 'text-primary' : 'text-muted-foreground'
+              }`}
+            >
+              Blogs
+            </Link>
           </nav>
 
           {/* Search Bar - Desktop */}
@@ -266,6 +274,15 @@ const Header = () => {
                 }`}
               >
                 Hot Deals
+              </Link>
+              <Link
+                to="/blogs"
+                onClick={() => setIsMobileMenuOpen(false)}
+                className={`block px-4 py-2 text-sm font-medium transition-colors hover:text-primary ${
+                  isActive('/blogs') ? 'text-primary bg-primary-light' : 'text-muted-foreground'
+                }`}
+              >
+                Blogs
               </Link>
             </nav>
           </div>

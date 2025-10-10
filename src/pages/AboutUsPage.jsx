@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Building, Mail, Phone, MapPin, Globe, FileText } from 'lucide-react';
 import { useAbout } from '../hooks/useAPI';
 import LoadingSpinner from '../components/LoadingSpinner';
@@ -6,6 +6,10 @@ import ErrorMessage from '../components/ErrorMessage';
 
 const AboutUsPage = () => {
   const { data: about, isLoading, isError } = useAbout();
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 
   if (isLoading) {
     return (
