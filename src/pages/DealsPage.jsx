@@ -4,7 +4,7 @@ import CouponCard from '../components/CouponCard';
 import CouponDetailModal from '../components/CouponDetailModal';
 import LoadingSpinner from '../components/LoadingSpinner';
 import ErrorMessage from '../components/ErrorMessage';
-import { useCoupons } from '../hooks/useAPI';
+import { useHotCoupons } from '../hooks/useAPI';
 
 const DealsPage = () => {
   const [filterType, setFilterType] = useState('all');
@@ -14,7 +14,7 @@ const DealsPage = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   // API data fetching
-  const { data: allCoupons = [], isLoading: couponsLoading, error: couponsError } = useCoupons();
+  const { data: allCoupons = [], isLoading: couponsLoading, error: couponsError } = useHotCoupons();
 
   const handleCouponClick = (coupon) => {
     setSelectedCoupon(coupon);

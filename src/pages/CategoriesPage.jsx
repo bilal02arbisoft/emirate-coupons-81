@@ -114,17 +114,11 @@ const CategoriesPage = () => {
             Browse all our partner stores or use our search feature to find exactly what you need
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link 
+            <Link
               to="/stores"
               className="px-8 py-3 bg-primary text-primary-foreground rounded-lg font-semibold hover:bg-primary-hover transition-colors"
             >
               View All Stores
-            </Link>
-            <Link 
-              to="/search"
-              className="px-8 py-3 border border-primary text-primary rounded-lg font-semibold hover:bg-primary hover:text-primary-foreground transition-colors"
-            >
-              Search Coupons
             </Link>
           </div>
         </div>

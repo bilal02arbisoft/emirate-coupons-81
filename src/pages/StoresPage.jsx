@@ -1,15 +1,15 @@
 import React, { useState, useMemo, useEffect } from 'react';
-import { Search, Filter, Grid, List } from 'lucide-react';
+import { Search, Filter, Grid } from 'lucide-react';
 import StoreCard from '../components/StoreCard';
-import StoresHeroCarousel from '../components/StoresHeroCarousel';
+
 import LoadingSpinner from '../components/LoadingSpinner';
 import { useStores, useCategories } from '../hooks/useAPI';
 
 const StoresPage = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('all');
-  const [sortBy, setSortBy] = useState('popular');
-  const [viewMode, setViewMode] = useState('grid');
+  const [sortBy, setSortBy] = useState('name');
+
 
   // Fetch data from API
   const { data: storesData, isLoading: storesLoading, error: storesError } = useStores();
@@ -163,12 +163,7 @@ const StoresPage = () => {
 
   return (
     <div className="min-h-screen">
-      {/* Hero Carousel */}
-      <section className="py-8">
-        <div className="container mx-auto px-4">
-          <StoresHeroCarousel />
-        </div>
-      </section>
+
 
       {/* Header */}
       <section className="bg-muted/30 py-12">
@@ -224,29 +219,7 @@ const StoresPage = () => {
                 <option value="name">Name A-Z</option>
               </select>
 
-              {/* View Mode */}
-              <div className="flex border border-input rounded-lg overflow-hidden">
-                <button
-                  onClick={() => setViewMode('grid')}
-                  className={`px-3 py-2 text-sm ${
-                    viewMode === 'grid' 
-                      ? 'bg-primary text-primary-foreground' 
-                      : 'bg-background hover:bg-muted'
-                  }`}
-                >
-                  <Grid className="w-4 h-4" />
-                </button>
-                <button
-                  onClick={() => setViewMode('list')}
-                  className={`px-3 py-2 text-sm ${
-                    viewMode === 'list' 
-                      ? 'bg-primary text-primary-foreground' 
-                      : 'bg-background hover:bg-muted'
-                  }`}
-                >
-                  <List className="w-4 h-4" />
-                </button>
-              </div>
+
             </div>
           </div>
         </div>
@@ -279,11 +252,7 @@ const StoresPage = () => {
               </button>
             </div>
           ) : (
-            <div className={`grid gap-6 ${
-              viewMode === 'grid' 
-                ? 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4' 
-                : 'grid-cols-1'
-            }`}>
+            <div className="grid gap-6 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
               {filteredAndSortedStores.map((store) => (
                 <StoreCard 
                   key={store.id} 

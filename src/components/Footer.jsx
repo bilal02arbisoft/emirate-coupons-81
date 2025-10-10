@@ -17,7 +17,7 @@ const Footer = () => {
                 <Percent className="w-5 h-5 text-white" />
               </div>
               <span className="text-xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
-                CouponHub
+               Discount-Code 
               </span>
             </Link>
             <p className="text-muted-foreground">
@@ -94,7 +94,7 @@ const Footer = () => {
             <ul className="space-y-3">
               <li className="flex items-center space-x-2 text-muted-foreground">
                 <Mail className="w-4 h-4" />
-                <span>support@couponhub.ae</span>
+                <span>support@discount-code.ae</span>
               </li>
               <li className="flex items-center space-x-2 text-muted-foreground">
                 <Phone className="w-4 h-4" />
@@ -129,7 +129,7 @@ const Footer = () => {
         <div className="border-t mt-12 pt-8">
           <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
             <div className="text-sm text-muted-foreground">
-              © 2024 CouponHub UAE. All rights reserved.
+              © 2024 Discount-Code UAE. All rights reserved.
             </div>
             <div className="flex space-x-6 text-sm">
               <Link to="/privacy" className="text-muted-foreground hover:text-primary transition-colors">
@@ -140,9 +140,6 @@ const Footer = () => {
               </Link>
               <Link to="/about" className="text-muted-foreground hover:text-primary transition-colors">
                 About Us
-              </Link>
-              <Link to="/contact" className="text-muted-foreground hover:text-primary transition-colors">
-                Contact
               </Link>
             </div>
           </div>

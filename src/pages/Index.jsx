@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { TrendingUp, Clock, Zap, ArrowRight } from 'lucide-react';
+import { TrendingUp, Clock, Zap, ArrowRight, Calendar, User } from 'lucide-react';
 import HeroCarousel from '../components/HeroCarousel';
 import CouponCard from '../components/CouponCard';
 import CouponDetailModal from '../components/CouponDetailModal';
@@ -8,13 +8,13 @@ import CategoryCard from '../components/CategoryCard';
 import StoreCard from '../components/StoreCard';
 import LoadingSpinner from '../components/LoadingSpinner';
 import ErrorMessage from '../components/ErrorMessage';
-import { 
-  useCoupons, 
-  useStores, 
-  useCategories, 
-  useExpiringCoupons,
+import {
+  useHotCoupons,
+  useStores,
+  useCategories,
   useStoresCount,
-  useCouponsCount
+  useCouponsCount,
+  useBlogs
 } from '../hooks/useAPI';
 
 const Index = () => {
@@ -22,22 +22,21 @@ const Index = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   // API data fetching
-  const { data: coupons = [], isLoading: couponsLoading, error: couponsError } = useCoupons();
+  const { data: hotCoupons = [], isLoading: couponsLoading, error: couponsError } = useHotCoupons();
   const { data: stores = [], isLoading: storesLoading, error: storesError } = useStores();
   const { data: categories = [], isLoading: categoriesLoading, error: categoriesError } = useCategories();
-  const { data: expiringCoupons = [], isLoading: expiringLoading } = useExpiringCoupons();
   const { data: storesCount } = useStoresCount();
   const { data: couponsCount } = useCouponsCount();
+  const { data: blogs = [], isLoading: blogsLoading, error: blogsError } = useBlogs();
 
   // Get different types of coupons for homepage sections
-  const trendingCoupons = coupons
-    .filter(coupon => coupon.usage_count > 1000)
-    .sort((a, b) => b.usage_count - a.usage_count)
-    .slice(0, 6);
+  const hotDeals = hotCoupons
+    .filter(coupon => coupon.show_on_homepage === true)
+    .slice(0, 12);
     
   const topStores = stores
     .sort((a, b) => b.total_coupons - a.total_coupons)
-    .slice(0, 8);
+    .slice(0, 12);
 
   const handleCouponClick = (coupon) => {
     setSelectedCoupon(coupon);
@@ -53,15 +52,6 @@ const Index = () => {
     <div className="min-h-screen">
       {/* Hero Section */}
       <section className="container mx-auto px-4 py-8">
-        <div className="text-center mb-8">
-          <h1 className="text-4xl md:text-6xl font-bold mb-4 bg-gradient-to-r from-primary via-accent to-primary bg-clip-text text-transparent">
-            Save Big with Verified Coupons
-          </h1>
-          <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-            Discover thousands of exclusive deals and discount codes from top UAE stores. 
-            Start saving money on your favorite brands today!
-          </p>
-        </div>
         <HeroCarousel />
       </section>
 
@@ -74,7 +64,7 @@ const Index = () => {
               <div className="text-muted-foreground">Partner Stores</div>
             </div>
             <div className="space-y-2">
-              <div className="text-3xl font-bold text-primary">{couponsCount?.total_coupons || coupons.length}+</div>
+              <div className="text-3xl font-bold text-primary">{couponsCount?.total_coupons || 0}+</div>
               <div className="text-muted-foreground">Active Coupons</div>
             </div>
             <div className="space-y-2">
@@ -89,31 +79,31 @@ const Index = () => {
         </div>
       </section>
 
-      {/* Trending Coupons */}
+      {/* Hot Deals */}
       <section className="py-16">
         <div className="container mx-auto px-4">
           <div className="flex items-center justify-between mb-8">
             <div className="flex items-center space-x-3">
-              <TrendingUp className="w-8 h-8 text-primary" />
-              <h2 className="text-3xl font-bold">Trending Deals</h2>
+              <Zap className="w-8 h-8 text-primary" />
+              <h2 className="text-3xl font-bold">Hot Deals</h2>
             </div>
-            <Link 
-              to="/deals" 
+            <Link
+              to="/deals"
               className="flex items-center space-x-2 text-primary hover:text-primary-hover font-medium"
             >
               <span>View All</span>
               <ArrowRight className="w-4 h-4" />
             </Link>
           </div>
-          
+
           {couponsLoading && <LoadingSpinner />}
           {couponsError && <ErrorMessage error={couponsError} />}
-          {trendingCoupons.length > 0 && (
+          {hotDeals.length > 0 && (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {trendingCoupons.map((coupon) => (
-                <CouponCard 
-                  key={coupon.id} 
-                  coupon={coupon} 
+              {hotDeals.map((coupon) => (
+                <CouponCard
+                  key={coupon.id}
+                  coupon={coupon}
                   onCouponClick={handleCouponClick}
                 />
               ))}
@@ -121,37 +111,6 @@ const Index = () => {
           )}
         </div>
       </section>
-
-      {/* Expiring Soon */}
-      {expiringCoupons.length > 0 && (
-        <section className="py-16 bg-warning-light">
-          <div className="container mx-auto px-4">
-            <div className="flex items-center justify-between mb-8">
-              <div className="flex items-center space-x-3">
-                <Clock className="w-8 h-8 text-warning" />
-                <div>
-                  <h2 className="text-3xl font-bold">Expiring Soon</h2>
-                  <p className="text-muted-foreground">Don't miss these limited-time offers!</p>
-                </div>
-              </div>
-            </div>
-            
-            {expiringLoading && <LoadingSpinner />}
-            {!expiringLoading && expiringCoupons.length > 0 && (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                {expiringCoupons.slice(0, 4).map((coupon) => (
-                  <CouponCard 
-                    key={coupon.id} 
-                    coupon={coupon} 
-                    compact 
-                    onCouponClick={handleCouponClick}
-                  />
-                ))}
-              </div>
-            )}
-          </div>
-        </section>
-      )}
 
       {/* Categories */}
       <section className="py-16">
@@ -174,7 +133,7 @@ const Index = () => {
           {categoriesError && <ErrorMessage error={categoriesError} />}
           {categories.length > 0 && (
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6">
-              {categories.map((category) => (
+              {categories.slice(0,12).map((category) => (
                 <CategoryCard key={category.id} category={category} />
               ))}
             </div>
@@ -205,6 +164,74 @@ const Index = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
               {topStores.map((store) => (
                 <StoreCard key={store.id} store={store} />
+              ))}
+            </div>
+          )}
+        </div>
+      </section>
+
+      {/* Blogs */}
+      <section className="py-16">
+        <div className="container mx-auto px-4">
+          <div className="flex items-center justify-between mb-8">
+            <div>
+              <h2 className="text-3xl font-bold mb-2">Latest Blogs</h2>
+              <p className="text-muted-foreground">Tips and insights for smart shopping in UAE</p>
+            </div>
+            <Link
+              to="/blogs"
+              className="flex items-center space-x-2 text-primary hover:text-primary-hover font-medium"
+            >
+              <span>View All</span>
+              <ArrowRight className="w-4 h-4" />
+            </Link>
+          </div>
+
+          {blogsLoading && <LoadingSpinner />}
+          {blogsError && <ErrorMessage error={blogsError} />}
+          {blogs.length > 0 && (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {blogs.slice(0, 3).map((blog) => (
+                <article
+                  key={blog.id}
+                  className="bg-card rounded-xl shadow-sm border border-border overflow-hidden hover:shadow-md transition-shadow"
+                >
+                  <div className="aspect-video overflow-hidden">
+                    <img
+                      src={blog.image}
+                      alt={blog.title}
+                      className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
+                    />
+                  </div>
+                  <div className="p-6">
+                    <div className="flex items-center space-x-4 text-sm text-muted-foreground mb-3">
+                      <div className="flex items-center space-x-1">
+                        <Calendar className="w-4 h-4" />
+                        <span>{new Date(blog.date).toLocaleDateString('en-US', {
+                          year: 'numeric',
+                          month: 'short',
+                          day: 'numeric'
+                        })}</span>
+                      </div>
+                      <div className="flex items-center space-x-1">
+                        <User className="w-4 h-4" />
+                        <span>{blog.author}</span>
+                      </div>
+                    </div>
+                    <h3 className="text-xl font-bold mb-3 line-clamp-2">
+                      {blog.title}
+                    </h3>
+                    <p className="text-muted-foreground mb-4 line-clamp-3">
+                      {blog.description}
+                    </p>
+                    <Link
+                      to={`/blogs/${blog.slug}`}
+                      className="text-primary hover:text-primary-hover font-medium text-sm"
+                    >
+                      Read More →
+                    </Link>
+                  </div>
+                </article>
               ))}
             </div>
           )}

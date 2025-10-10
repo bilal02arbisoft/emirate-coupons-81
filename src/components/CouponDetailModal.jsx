@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
-import { X, Copy, ExternalLink, CheckCircle, Clock, Star, Users, Tag } from 'lucide-react';
+import { X, Copy, ExternalLink, CheckCircle, Star, Users, Tag } from 'lucide-react';
 import { useStore } from '../hooks/useAPI';
 
 const CouponDetailModal = ({ coupon, isOpen, onClose }) => {
   const [copiedCode, setCopiedCode] = useState(false);
+
+  const hasCode = !!coupon?.code;
 
   // Fetch store data from API
   const { data: store } = useStore(coupon?.store_id);
@@ -16,15 +18,7 @@ const CouponDetailModal = ({ coupon, isOpen, onClose }) => {
     setTimeout(() => setCopiedCode(false), 2000);
   };
 
-  const formatTimeLeft = (expiryDate) => {
-    const now = new Date();
-    const expiry = new Date(expiryDate);
-    const diffInHours = Math.floor((expiry - now) / (1000 * 60 * 60));
-    
-    if (diffInHours < 24) return `${diffInHours}h left`;
-    if (diffInHours < 168) return `${Math.floor(diffInHours / 24)}d left`;
-    return 'Limited time';
-  };
+
 
   const getDiscountDisplay = () => {
     if (coupon.discount_type === 'percentage') {
@@ -81,7 +75,7 @@ const CouponDetailModal = ({ coupon, isOpen, onClose }) => {
           
           <h2 className="text-2xl font-bold mb-2">{coupon.title}</h2>
           <div className="text-4xl font-bold mb-2">{getDiscountDisplay()}</div>
-          
+
           {coupon.minimum_order > 0 && (
             <p className="text-white/90">
               On orders above {coupon.currency} {coupon.minimum_order}
@@ -92,11 +86,7 @@ const CouponDetailModal = ({ coupon, isOpen, onClose }) => {
         {/* Content */}
         <div className="p-6 space-y-6">
           {/* Quick Stats */}
-          <div className="grid grid-cols-3 gap-4 text-center">
-            <div className="p-4 bg-muted/30 rounded-xl">
-              <Clock className="w-6 h-6 mx-auto mb-2 text-warning" />
-              <div className="font-semibold text-sm">{formatTimeLeft(coupon.expiry_date)}</div>
-            </div>
+          <div className="grid grid-cols-2 gap-4 text-center">
             <div className="p-4 bg-muted/30 rounded-xl">
               <Star className="w-6 h-6 mx-auto mb-2 text-yellow-500" />
               <div className="font-semibold text-sm">{Math.round(coupon.success_rate * 100)}% Success</div>
@@ -107,31 +97,40 @@ const CouponDetailModal = ({ coupon, isOpen, onClose }) => {
             </div>
           </div>
 
-          {/* Coupon Code */}
-          <div className="text-center">
-            <div className="text-sm text-muted-foreground mb-2">Coupon Code</div>
-            <div className="flex items-center justify-center space-x-3">
-              <div className="px-6 py-3 bg-muted rounded-xl font-mono text-xl font-bold tracking-wider">
-                {coupon.code}
+          {/* Coupon Code or Offer Message */}
+          {hasCode ? (
+            <div className="text-center">
+              <div className="text-sm text-muted-foreground mb-2">Coupon Code</div>
+              <div className="flex items-center justify-center space-x-3">
+                <div className="px-6 py-3 bg-muted rounded-xl font-mono text-xl font-bold tracking-wider">
+                  {coupon.code}
+                </div>
+                <button
+                  onClick={copyCode}
+                  className="flex items-center px-4 py-3 bg-primary text-primary-foreground rounded-xl hover:bg-primary/90 transition-colors"
+                >
+                  {copiedCode ? (
+                    <>
+                      <CheckCircle className="w-5 h-5 mr-2" />
+                      Copied!
+                    </>
+                  ) : (
+                    <>
+                      <Copy className="w-5 h-5 mr-2" />
+                      Copy
+                    </>
+                  )}
+                </button>
               </div>
-              <button
-                onClick={copyCode}
-                className="flex items-center px-4 py-3 bg-primary text-primary-foreground rounded-xl hover:bg-primary/90 transition-colors"
-              >
-                {copiedCode ? (
-                  <>
-                    <CheckCircle className="w-5 h-5 mr-2" />
-                    Copied!
-                  </>
-                ) : (
-                  <>
-                    <Copy className="w-5 h-5 mr-2" />
-                    Copy
-                  </>
-                )}
-              </button>
             </div>
-          </div>
+          ) : (
+            <div className="text-center">
+              <div className="text-sm text-muted-foreground mb-2">Special Offer</div>
+              <div className="px-6 py-3 bg-muted rounded-xl text-lg font-semibold">
+                This is a special offer - no code required! Just visit the store to redeem.
+              </div>
+            </div>
+          )}
 
           {/* Categories */}
           {coupon.categories && coupon.categories.length > 0 && (
@@ -170,22 +169,32 @@ const CouponDetailModal = ({ coupon, isOpen, onClose }) => {
 
           {/* Action Buttons */}
           <div className="flex flex-col sm:flex-row gap-3 pt-4">
-            <button 
-              onClick={copyCode}
-              className="flex-1 flex items-center justify-center px-6 py-3 bg-primary text-primary-foreground rounded-xl hover:bg-primary/90 transition-colors font-semibold"
-            >
-              {copiedCode ? (
-                <>
-                  <CheckCircle className="w-5 h-5 mr-2" />
-                  Code Copied!
-                </>
-              ) : (
-                <>
-                  <Copy className="w-5 h-5 mr-2" />
-                  Copy & Shop Now
-                </>
-              )}
-            </button>
+            {hasCode ? (
+              <button
+                onClick={copyCode}
+                className="flex-1 flex items-center justify-center px-6 py-3 bg-primary text-primary-foreground rounded-xl hover:bg-primary/90 transition-colors font-semibold"
+              >
+                {copiedCode ? (
+                  <>
+                    <CheckCircle className="w-5 h-5 mr-2" />
+                    Code Copied!
+                  </>
+                ) : (
+                  <>
+                    <Copy className="w-5 h-5 mr-2" />
+                    Copy & Shop Now
+                  </>
+                )}
+              </button>
+            ) : (
+              <button
+                onClick={() => window.open(store?.website_url, '_blank', 'noopener,noreferrer')}
+                className="flex-1 flex items-center justify-center px-6 py-3 bg-primary text-primary-foreground rounded-xl hover:bg-primary/90 transition-colors font-semibold"
+              >
+                <ExternalLink className="w-5 h-5 mr-2" />
+                Redeem Offer
+              </button>
+            )}
             <a
               href={store?.website_url}
               target="_blank"

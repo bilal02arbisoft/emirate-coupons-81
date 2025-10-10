@@ -1,12 +1,9 @@
-# TODO: Fix "Visit Store" Button Routing in CouponCard.jsx
+# TODO: Remove Time Left from Coupon Modal
 
-- [x] Update "Visit Store" button to link to store's external website URL
-- [x] Test the navigation functionality
+## Tasks
+- [x] Remove the time left stat from the Quick Stats section in CouponDetailModal.jsx
+- [x] Change the grid from grid-cols-3 to grid-cols-2
+- [x] Remove the formatTimeLeft function and Clock import
 
-# TODO: Fix "Visit Store" Button Routing in CouponDetailModal.jsx
-
-- [x] Update "Visit Store" button to link to store's external website URL
-- [x] Test the navigation functionality
-
-
-# TODO: Debug and Fix Category Filtering in StoresPage.jsx
+## Followup
+- [ ] Test the modal to ensure it displays correctly with only two stats

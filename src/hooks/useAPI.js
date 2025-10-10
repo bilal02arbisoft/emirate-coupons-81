@@ -37,19 +37,19 @@ export const useCoupons = () => {
   });
 };
 
+export const useHotCoupons = () => {
+  return useQuery({
+    queryKey: ['coupons', 'hot'],
+    queryFn: api.getHotCoupons,
+    staleTime: 2 * 60 * 1000, // 2 minutes for more frequent updates
+  });
+};
+
 export const useCouponsCount = () => {
   return useQuery({
     queryKey: ['coupons', 'count'],
     queryFn: api.getCouponsCount,
     staleTime: 2 * 60 * 1000,
-  });
-};
-
-export const useExpiringCoupons = () => {
-  return useQuery({
-    queryKey: ['coupons', 'expiring'],
-    queryFn: api.getExpiringCoupons,
-    staleTime: 30 * 60 * 1000, // 30 minutes
   });
 };
 
@@ -77,6 +77,33 @@ export const useSearchCoupons = (query) => {
     queryFn: () => api.searchCoupons(query),
     enabled: !!query && query.length > 0, // Only search if query exists
     staleTime: 1 * 60 * 1000, // 1 minute for search results
+  });
+};
+
+// Banners hooks
+export const useBanners = () => {
+  return useQuery({
+    queryKey: ['banners'],
+    queryFn: api.getBanners,
+    staleTime: 5 * 60 * 1000, // 5 minutes
+  });
+};
+
+// About hooks
+export const useAbout = () => {
+  return useQuery({
+    queryKey: ['about'],
+    queryFn: api.getAbout,
+    staleTime: 10 * 60 * 1000, // 10 minutes for static content
+  });
+};
+
+// Blogs hooks
+export const useBlogs = () => {
+  return useQuery({
+    queryKey: ['blogs'],
+    queryFn: api.getBlogs,
+    staleTime: 5 * 60 * 1000, // 5 minutes
   });
 };
 

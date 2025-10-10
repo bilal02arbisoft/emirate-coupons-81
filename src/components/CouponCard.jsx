@@ -6,22 +6,39 @@ const CouponCard = ({ coupon, compact = false, onCouponClick }) => {
   const [copiedCode, setCopiedCode] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
 
+  const hasCode = !!coupon.code;
+
   // Fetch stores data from API
   const { data: stores = [] } = useStores();
   const store = stores.find(s => s.id === coupon.store_id);
   
   const copyCode = () => {
+    if (!hasCode) return;
     navigator.clipboard.writeText(coupon.code);
     setCopiedCode(true);
     setTimeout(() => setCopiedCode(false), 2000);
+  };
+
+  const handleGoToOffer = () => {
+    if (store?.website_url) {
+      window.open(store.website_url, '_blank', 'noopener,noreferrer');
+    }
+  };
+
+  const handleCardClick = () => {
+    if (hasCode && onCouponClick) {
+      onCouponClick(coupon);
+    } else {
+      handleGoToOffer();
+    }
   };
   
   const formatTimeLeft = (expiryDate) => {
     const now = new Date();
     const expiry = new Date(expiryDate);
     const diffInHours = Math.floor((expiry - now) / (1000 * 60 * 60));
-    
-    if (diffInHours < 0) return 'Expired';
+
+    if (diffInHours < 0) return '';
     if (diffInHours < 24) return `${diffInHours}h left`;
     if (diffInHours < 168) return `${Math.floor(diffInHours / 24)}d left`;
     return 'Valid';
@@ -59,7 +76,7 @@ const CouponCard = ({ coupon, compact = false, onCouponClick }) => {
         className={`coupon-card p-4 cursor-pointer transition-all duration-300 ${isHovered ? 'scale-105' : ''}`}
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
-        onClick={() => onCouponClick?.(coupon)}
+        onClick={handleCardClick}
       >
         <div className="flex items-center justify-between mb-3 gap-3">
           <div className="flex items-center space-x-3 flex-1 min-w-0">
@@ -76,17 +93,16 @@ const CouponCard = ({ coupon, compact = false, onCouponClick }) => {
               <p className="text-xs text-muted-foreground truncate">{store?.name}</p>
             </div>
           </div>
-          <div className="text-right flex-shrink-0">
-
-            <div className="text-xs text-muted-foreground whitespace-nowrap">{timeLeft}</div>
-          </div>
+        <div className="text-right flex-shrink-0">
+          {timeLeft && <div className="text-xs text-muted-foreground whitespace-nowrap">{timeLeft}</div>}
+        </div>
         </div>
         
         <button
-          onClick={(e) => { e.stopPropagation(); copyCode(); }}
+          onClick={(e) => { e.stopPropagation(); hasCode ? copyCode() : handleGoToOffer(); }}
           className="w-full py-2 px-4 bg-primary text-primary-foreground rounded-lg text-sm font-medium hover:bg-primary-hover transition-colors"
         >
-          {copiedCode ? 'Copied!' : `Get Code: ${coupon.code}`}
+          {copiedCode ? 'Copied!' : (hasCode ? 'Get Code' : 'Go to Offer')}
         </button>
       </div>
     );
@@ -97,7 +113,7 @@ const CouponCard = ({ coupon, compact = false, onCouponClick }) => {
       className={`coupon-card p-6 cursor-pointer transition-all duration-300 ${isHovered ? 'scale-105' : ''}`}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
-      onClick={() => onCouponClick?.(coupon)}
+      onClick={handleCardClick}
     >
       {/* Header */}
       <div className="flex items-start justify-between mb-4 gap-4">
@@ -121,7 +137,7 @@ const CouponCard = ({ coupon, compact = false, onCouponClick }) => {
         </div>
         
         <div className="text-right flex-shrink-0">
-          {isExpiring && (
+          {isExpiring && timeLeft && (
             <div className="text-xs text-warning font-semibold bg-warning-light px-2 py-1 rounded whitespace-nowrap">
               ⏰ {timeLeft}
             </div>
@@ -172,16 +188,16 @@ const CouponCard = ({ coupon, compact = false, onCouponClick }) => {
             <span>{Math.round(coupon.success_rate * 100)}% success</span>
           </div>
         </div>
-        <div className="flex items-center space-x-1">
+        {timeLeft && <div className="flex items-center space-x-1">
           <Clock className="w-3 h-3" />
           <span>{timeLeft}</span>
-        </div>
+        </div>}
       </div>
 
       {/* Action Buttons */}
       <div className="flex flex-col sm:flex-row gap-3">
         <button
-          onClick={(e) => { e.stopPropagation(); copyCode(); }}
+          onClick={(e) => { e.stopPropagation(); hasCode ? copyCode() : handleGoToOffer(); }}
           className="flex-1 flex items-center justify-center px-4 py-3 bg-primary text-primary-foreground rounded-xl font-semibold hover:bg-primary-hover transition-all duration-300 transform hover:scale-105"
         >
           {copiedCode ? (
@@ -189,10 +205,15 @@ const CouponCard = ({ coupon, compact = false, onCouponClick }) => {
               <CheckCircle className="w-4 h-4 mr-2" />
               Copied!
             </>
-          ) : (
+          ) : hasCode ? (
             <>
               <Copy className="w-4 h-4 mr-2" />
               Get Code
+            </>
+          ) : (
+            <>
+              <ExternalLink className="w-4 h-4 mr-2" />
+              Go to Offer
             </>
           )}
         </button>

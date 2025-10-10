@@ -1,5 +1,5 @@
 // API service layer for coupon aggregator
-const API_BASE_URL = 'https://coupon-backend-production-7f41.up.railway.app/api';
+const API_BASE_URL = 'http://127.0.0.1:5000/api';
 
 // Generic fetch function with error handling
 const fetchAPI = async (endpoint) => {
@@ -26,6 +26,7 @@ export const api = {
   
   // Coupons
   getCoupons: () => fetchAPI('/coupons'),
+  getHotCoupons: () => fetchAPI('/coupons/hot'),
   getCouponsCount: () => fetchAPI('/coupons/count'),
   getExpiringCoupons: () => fetchAPI('/coupons/expiring'),
   getCouponsByStore: (storeId) => fetchAPI(`/coupons/store/${storeId}`),
@@ -36,10 +37,23 @@ export const api = {
     // Since there's no search endpoint, we'll fetch all coupons and filter client-side
     const coupons = await fetchAPI('/coupons');
     const lowerQuery = query.toLowerCase();
-    return coupons.filter(coupon => 
+    return coupons.filter(coupon =>
       coupon.title.toLowerCase().includes(lowerQuery) ||
       coupon.code.toLowerCase().includes(lowerQuery) ||
       coupon.categories.some(cat => cat.toLowerCase().includes(lowerQuery))
     );
+  },
+
+  // Banners
+  getBanners: () => fetchAPI('/banners'),
+
+  // About
+  getAbout: () => fetchAPI('/about'),
+
+  // Blogs
+  getBlogs: () => fetchAPI('/blogs'),
+  getBlogBySlug: async (slug) => {
+    const blogs = await fetchAPI('/blogs');
+    return blogs.find(b => b.slug === slug);
   }
 };

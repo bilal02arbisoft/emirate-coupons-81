@@ -4,7 +4,6 @@ import { Filter, Grid, List, ArrowLeft } from 'lucide-react';
 import CouponCard from '../components/CouponCard';
 import StoreCard from '../components/StoreCard';
 import CouponDetailModal from '../components/CouponDetailModal';
-import CategoryHeroCarousel from '../components/CategoryHeroCarousel';
 import LoadingSpinner from '../components/LoadingSpinner';
 import ErrorMessage from '../components/ErrorMessage';
 import { useCategory, useStores, useCouponsByCategory } from '../hooks/useAPI';
@@ -139,13 +138,6 @@ const CategoryPage = () => {
         </div>
       </section>
 
-      {/* Featured Deals Carousel */}
-      <section className="py-8">
-        <div className="container mx-auto px-4">
-          <CategoryHeroCarousel categoryId={categoryId} />
-        </div>
-      </section>
-
       {/* Navigation Tabs */}
       <section className="py-6 border-b">
         <div className="container mx-auto px-4">
@@ -252,14 +244,14 @@ const CategoryPage = () => {
                     <div className="text-6xl mb-4">🎫</div>
                     <h3 className="text-2xl font-bold mb-2">No coupons found</h3>
                     <p className="text-muted-foreground mb-6">
-                      Try adjusting your filter criteria or check back later for new deals
+                      Can't find what you're looking for? Browse all our partner stores or use our search feature to find exactly what you need
                     </p>
-                    <button
-                      onClick={() => setFilterStore('all')}
+                    <Link
+                      to="/stores"
                       className="px-6 py-3 bg-primary text-primary-foreground rounded-lg font-medium hover:bg-primary-hover transition-colors"
                     >
-                      Show All Coupons
-                    </button>
+                      View All Stores
+                    </Link>
                   </div>
                 ) : (
                   <div className={`grid gap-6 ${
