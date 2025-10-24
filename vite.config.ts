@@ -13,6 +13,7 @@ export default defineConfig(({ mode }) => ({
     allowedHosts: [
       "emirate-coupons-81-production-7dbb.up.railway.app",
       "discount-code.ae",
+      "https://discount-code.netlify.app/",
       // You can also use a wildcard for all Railway hosts
       ".up.railway.app",
       // Allow localhost for development

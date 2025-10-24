@@ -1,5 +1,5 @@
 // API service layer for coupon aggregator
-const API_BASE_URL = 'https://coupon-backend-production-7f41.up.railway.app/api';
+const API_BASE_URL = 'https://api.discount-code.ae/api';
 
 // Generic fetch function with error handling
 const fetchAPI = async (endpoint) => {
